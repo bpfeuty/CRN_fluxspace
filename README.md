@@ -26,7 +26,6 @@ Below is the list of shared files associated to
 - Figure 2 and S1 (random reaction network with two chemostats)
 -- sampling_fig2.f90
 -- fig2B.dat, fig2C.dat, fig2D.dat
-
 - Figure 3, 4 and S2 (random reaction network with three chemostats)
 -- manifold_fig34.f90 compute the boundary of feasible flux space in the following data files:
 --- manifold_fig3.dat (fig3B,3C,3G)
@@ -34,7 +33,6 @@ Below is the list of shared files associated to
 -- sampling_fig34.f90 compute the sampled flux solutions in the following data files
 --- x
 --- x
-
 - Figure 5, 6 and S3 (coarse grained metabolic network)
 -- sampling_fig56.f90
 -- manifold_fig56.f90
