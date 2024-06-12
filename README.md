@@ -6,22 +6,26 @@ The file extensions are:
 - ".py" for python files
 - ".out" for compiled fortran files
 - ".dat" for data files
-- ".xxx" for fortran library file
+- ".a" for fortran library file
   
-The main script file names are respectively:
-- "manifold." for computing the feasible flux space of positive entropy production rate.
+The file names begins respectively by:
+- "manifold" for computing the feasible flux space of positive entropy production rate.
   - manifold_fig34.f90 and manifold_fig56.f90
   - no library need to be linked
-- "sampling." for computing the sampled flux solutions
-  - sampling_fig34.f90 and  sampling_fig56.f90
-  -  
-- "figXY." for data file associated to FigX panel Y
+- "sampling" for computing the sampled flux solutions
+  - sampling_fig34.f90 and sampling_fig56.f90
+  - library used: lseulex2.a, lminpack.a, -llapack.a
+- "figXY" for data file associated to Fig X, panel Y.
   
-The fortran compiler used is GNU fortran compiler. 
+The fortran compiler used :
+GNU Fortran (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
+Copyright (C) 2021 Free Software Foundation, Inc.
 
-Below is the list of all files for each figure with their description.
--Figure 2B and S1: 
+Below is the list of all files 
+-Figure 2B and S1
+-- d
 -Figure 2C: 
+-- d
 -Figure 3B,C: 
 -Figure 4B,C:
 -Figure 5C:
