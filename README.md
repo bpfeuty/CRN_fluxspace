@@ -1,9 +1,9 @@
 # metafluxspace_BJ2024
-This repository contains the fortran scripts and data files allowing to generate the figures of the paper x" by Pfeuty submitted to Biophysical Journal.
+This repository contains the fortran scripts and data files allowing to generate the figures of the paper "Free-energy transduction mechanisms shape the flux space of metabolic networks" authored by Benjamin Pfeuty and submitted to Biophysical Journal.
 
-The repository distingues the codes and data associated to the computation of thermodynamically-feasible flux spaces called "manifold_xxx" and the codes and data associated to sampling analysis "sampling_xxx".
+The repository contains the codes and data associated to the computation of thermodynamically-feasible flux spaces and the codes and data associated to sampling analysis.
 
-Regarding the computation of the feasible flux space of diverse metabolic networks and chemostatting conditions, the repository contains:
+To compute the feasible flux space of diverse metabolic networks and chemostatting conditions, the repository contains:
 - the fortran script: manifold_fig3-4.f90  and manifoled_fig5.f90
 - the data files:  manifold_fig3.dat, manifold_fig4.dat, manifold_fig5.dat
 
