@@ -8,14 +8,26 @@ The file extensions are:
 - ".dat" for data files
 - ".xxx" for fortran library file
   
-The script file names are respectively:
+The main script file names are respectively:
 - "manifold." for computing the feasible flux space of positive entropy production rate.
+  - manifold_fig34.f90 and manifold_fig56.f90
+  - no library need to be linked
 - "sampling." for computing the sampled flux solutions
+  - sampling_fig34.f90 and  sampling_fig56.f90
+  -  
 - "figXY." for data file associated to FigX panel Y
   
 The fortran compiler used is GNU fortran compiler. 
 
-Below is the list of all files with their description
+Below is the list of all files for each figure with their description.
+-Figure 2B and S1: 
+-Figure 2C: 
+-Figure 3B,C: 
+-Figure 4B,C:
+-Figure 5C:
+-Figure 6A:
+
+
 The repository contains the fortran and python codes (.f90 and .py), the executables () and data associated to the computation of thermodynamically-feasible flux spaces and the codes and data associated to sampling analysis.
 
 To compute the  of diverse metabolic networks and chemostatting conditions, the repository contains:
