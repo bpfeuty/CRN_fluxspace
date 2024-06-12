@@ -23,11 +23,11 @@ GNU Fortran (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
 Copyright (C) 2021 Free Software Foundation, Inc.
 
 Below is the list of shared files associated to  
--Figure 2 and S1 (random reaction network with two chemostats)
+- Figure 2 and S1 (random reaction network with two chemostats)
 -- sampling_fig2.f90
 -- fig2B.dat, fig2C.dat, fig2D.dat
 
--Figure 3, 4 and S2 (random reaction network with three chemostats)
+- Figure 3, 4 and S2 (random reaction network with three chemostats)
 -- manifold_fig34.f90 compute the boundary of feasible flux space in the following data files:
 --- manifold_fig3.dat (fig3B,3C,3G)
 --- manifold_fig4.dat (fig4B,4C,4G)
@@ -35,17 +35,7 @@ Below is the list of shared files associated to
 --- x
 --- x
 
--Figure 5, 6 and S3 (coarse grained metabolic network)
+- Figure 5, 6 and S3 (coarse grained metabolic network)
 -- sampling_fig56.f90
 -- manifold_fig56.f90
-
-To compute the  of diverse metabolic networks and chemostatting conditions, the repository contains:
-- manifold_fig3.dat, manifold_fig4.dat, manifold_fig5.dat
-
-Regarding the kinetic sampling of the feasible flux space of diverse metabolic networks, the repository contains:
-- the fortran script: sampling_fig2.f90, sampling_fig3-4.f90  and sampling_fig5.f90
-  The compilation requires three fortran libraries : lapack minpack and seulex.
-- the data files: sampling_fig2.dat, sampling_fig3.dat, sampling_fig4.dat, sampling_fig5.dat
-
-Besides these core programs that performs manifold analysis and sampling analysis, the repository also contains programs that performs specific analysis.
 
