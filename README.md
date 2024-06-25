@@ -27,13 +27,16 @@ The files are organized into folders associated to a set of figures:
   - sampling_fig2_nmX.f90
   - fig2B.dat, fig2C.dat, fig2D.dat
 - Folder FIG_3-4-S2 (random reaction network with three chemostats) contains:
-  - manifold_fig34.f90 compute the boundary of feasible flux space in the following data files:
-  - manifold_fig3.dat (generates manifold_fig3.dat used in fig3BCG)
-  - manifold_fig4.dat (generates manifold_fig4.dat used in fig4BCG)
-  - sampling_fig34_nmX.f90 compute the sampled flux solutions and the distribution of objective values (maximum biomass yield and flux space volume)
-  - fig3.dat
-  - fig3.dat
+  - manifold_fig34.f90 (generates manifold_fig3.dat and manifold_fig4.dat)
+  - manifold_fig3.dat (used in fig3BCG)
+  - manifold_fig4.dat (used in fig4BCG)
+  - sampling_fig34_nmX.f90 (samples steady state flux solutions and the distribution of objective values)
+  - fig3b_nm1.dat
+  - fig3c_nm2.dat
+  - fig4b_nm1.dat
+  - fig4c_nm2.dat 
+  - xxx
 - Folder FIG_5-6-S3 (coarse grained metabolic network) contains:
-  - sampling_fig56.f90
-  - manifold_fig56.f90
-  - ***.dat
+  - manifold_fig56.f90 (generates the boundary manifold of the feasible flux space)
+  - sampling_fig56.f90  (samples steady state flux solutions)
+  - xxxx.dat
