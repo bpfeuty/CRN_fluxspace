@@ -21,10 +21,13 @@ The file names begins respectively by:
 The fortran compiler used :
 GNU Fortran (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
 Copyright (C) 2021 Free Software Foundation, Inc.
-Some fortran codes use lapack and minpack libraries. To install it on linux:
-apt-get install minpack-dev 
-apt-get install lapack-dev
 
+Some Fortran programs require the LAPACK, MINPACK and SEULEX libraries. These libraries can be installed on a Linux system and linked to gfortran using the following commands
+> apt-get install minpack-dev 
+> apt-get install lapack-dev
+> cp libseulex2.a /usr/lib/
+> gfortran code.f90 -L/path/to/lib -llapack -lminpack -lseulex2
+ 
 The files are organized into folders associated to a set of figures:
 - Folder FIG_2-S1 (random reaction network with two chemostats) contains:
   - sampling_fig2_nmX.f90
