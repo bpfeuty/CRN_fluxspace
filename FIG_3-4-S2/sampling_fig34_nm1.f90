@@ -1,4 +1,4 @@
-!! gfortran sampling_fig34_nm2.f90 -lseulex2 -lminpack -llapack
+!! gfortran sampling_fig34_nm1.f90 -lseulex2 -lminpack -llapack
 
 module GLOB ! DEFINITION OF THE VARIABLE AND NETWORK
   implicit none
@@ -123,7 +123,7 @@ program principal !!REF
   !nk=500 is used to test the sampled space of given topologies
   !nk=1 is used to sample together topologies and kinetics
   
-  do i0=6,6,1
+  do i0=1,4,3
      write(*,*) 'simulation index=',i0
      if (i0==0) then !FigS2 
         nsamp=10000; ifig=3; nk=1;  
@@ -132,19 +132,19 @@ program principal !!REF
         nsamp=10000; nk=1; ifig=3;
      endif
      if (i0==2) then !fig3E nec=2/nbc=1 CT=10mn
-        nsamp=2000; nk=500; ifig=3;
+        nsamp=1000; nk=1000; ifig=3;
      endif
      if (i0==3) then !fig3E nec=1/nbc=2, CT=10mn
-        nsamp=2000; nk=500; ifig=3;
+        nsamp=1000; nk=1000; ifig=3;
      endif
      if (i0==4) then !Fig4C,  CT=12s
         nsamp=10000; nk=1; ifig=4;
      endif
      if (i0==5) then !FIg4E ncc=2; CT=10mn
-        nsamp=500; nk=500; ifig=4; 
+        nsamp=1000; nk=1000; ifig=4; 
      endif
      if (i0==6) then !FIg4E ncc=0 (set nr=10 in module GLOB) CT=10mn
-        nsamp=500; nk=500; ifig=4;
+        nsamp=1000; nk=1000; ifig=4;
      endif
      
      !Chemostatting 
@@ -204,7 +204,7 @@ program principal !!REF
         !kinetic sampling
         maxj=-1.;  disj=0D0
         do ik=1,nk 
-           call random_number(kcat); kcat=10**(3.*kcat-2); 
+           call random_number(kcat); kcat=10**(4.*kcat-2); 
            kcat(1:nc)=1d0;
 
            ! simulations

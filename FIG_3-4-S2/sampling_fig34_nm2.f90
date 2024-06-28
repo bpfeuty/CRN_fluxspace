@@ -8,7 +8,7 @@ module GLOB ! DEFINITION OF THE VARIABLE AND NETWORK
 
   !! ns is the number of species (=8 in default simulations but varied in FIGS2)
   !! nr is the number of reactions (=12 in default simulations but varied in FIGS2)
-  !! nm is the molecularity of reaction (=2 except panels B).
+  !! nm is the molecularity of reaction (=2 except panels B and some distributions).
   !! nc=3 is the number of chemostat 
   
   integer,parameter::nplot=500000; 
@@ -109,14 +109,14 @@ program principal !!REF
   real(kind=kind(0.d0))::maxj,disj1(50),disj2(50)    !store maximal values of specific fluxes and their distribution (FIG3)
   real(kind=kind(0.d0))::scoret,disj(12,12),disurf(100) !feasible space volume and its distribution (FIG4)
 
-  open(10,file='figS2.dat');
+  open(10,file='figS2.dat'); 
   open(11,file='fig3c_nm2.dat');
   open(14,file='fig4c_nm2.dat');
   open(24,file='fig3e_nec1_nm2.dat');
   open(25,file='fig3e_nec2_nm2.dat');
   open(26,file='fig4e_ncc2_nm2.dat');
   open(27,file='fig4e_ncc0_nm2.dat');
-  open(17,file='fig3f_nm2.dat'); 
+  open(17,file='fig3g_nm2.dat'); 
   !open(20,file='matrix.res');
 
   !i0 from 0 to 7 corresponds to a given hypeparameter associated to a specific figure (3 or 4) and panel
@@ -124,33 +124,34 @@ program principal !!REF
   !nk=500 is used to test the sampled space of given topologies
   !nk=1 is used to sample together topologies and kinetics
   
-  do i0=6,6,1
+  do i0=7,7,3
      write(*,*) 'simulation index=',i0
-     if (i0==0) then !FigS2 
+     if (i0==0) then !figS2.dat change nsam, or the range of parameters. 
         nsamp=10000; ifig=3; nk=1;  
      endif
-     if (i0==1) then !Fig3C: CT=12s    
-        nsamp=10000; nk=1; ifig=3;
+     if (i0==1) then !fig3c_nm2.dat: CT=12s    
+        nsamp=50000; nk=1; ifig=3;
      endif
-     if (i0==2) then !fig3E nec=2/nbc=1 CT=10mn
-        nsamp=2000; nk=500; ifig=3;
+     if (i0==2) then !fig3e_nec2_nm2.dat (nbc=1) CT=10mn
+        nsamp=1000; nk=1000; ifig=3;
      endif
-     if (i0==3) then !fig3E nec=1/nbc=2, CT=10mn
-        nsamp=2000; nk=500; ifig=3;
+     if (i0==3) then !fig3e_nec1_nm2.dat (nbc=2), CT=10mn
+        nsamp=1000; nk=1000; ifig=3;
      endif
-     if (i0==4) then !Fig4C,  CT=12s
-        nsamp=10000; nk=1; ifig=4;
+     if (i0==4) then !Fig4c_nm2,  CT=12s
+        nsamp=20000; nk=1; ifig=4;
      endif
-     if (i0==5) then !FIg4E ncc=2; CT=10mn
-        nsamp=500; nk=500; ifig=4; 
+     if (i0==5) then !fig4e_ncc2_nm2.dat; CT=10mn
+        nsamp=1000; nk=1000; ifig=4; 
      endif
-     if (i0==6) then !FIg4E ncc=0 (set nr=10 in module GLOB) CT=10mn
-        nsamp=500; nk=500; ifig=4;
+     if (i0==6) then !fig4e_ncc0_nm2.dat; CT=10mn
+        !! (set nr=10 in module GLOB) 
+        nsamp=1000; nk=1000; ifig=4;
      endif
-     if (i0==7) then !fig3f
-        nsamp=10000; ifig=3; nk=1;
+     if (i0==7) then !fig3g.dat !100000
+        nsamp=500; ifig=3; nk=1000; 
      endif
-     
+  
      !Chemostatting 
      muy0=0D0;
      if (ifig==3) then
@@ -184,10 +185,10 @@ program principal !!REF
            if (nec.ne.1) goto 9 
         endif
         if (i0==5) then !nd(3) is the number of closed cycle: ncc=2
-           if (nd(3).ne.2) goto 9 
+           if ((nd(3).ne.2).or.(nec.ne.2)) goto 9 
         endif
         if (i0==6) then !nd(3) is the number of closed cycle: ncc=0
-           if (nd(3).ne.0) goto 9 
+           if ((nd(3).ne.0).or.(nec.ne.2)) goto 9 
         endif
         if (conn(1,2)>0.5) goto 9 !exclude connections between exchange species
 
@@ -208,7 +209,7 @@ program principal !!REF
         !kinetic sampling
         maxj=-1.;  disj=0D0
         do ik=1,nk 
-           call random_number(kcat); kcat=10**(3.*kcat-2); 
+           call random_number(kcat); kcat=10**(4.*kcat-2); !extended for vmax
            kcat(1:nc)=1d0;
 
            ! simulations
@@ -224,14 +225,9 @@ program principal !!REF
 
            sigtot=ente(1);
            if (ib==2) goto 9
-
-           if (nk<2) then !if systematic sampling
-              if (i0==0) then
-                 write(10+i0,*) sigtot/sigmax,flu(3),ente(3)/ente(1) !figS2
-              else
-                 write(10+i0,*) sigtot/sigmax,flu(1:nc),ente(3)/ente(1)
-              endif
-           endif
+           if (nk<2) write(10+i0,*) sigtot/sigmax,flu(1:nc),ente(3)/ente(1) 
+           if (i0==0) write(10+i0,*) sigtot/sigmax,flu(3),ente(3)/ente(1)
+           if (i0==7) write(10+i0,*) sigtot/sigmax,flu(1:nc),ente(3)/ente(1)
            if (-flu(3)>maxj) maxj=-flu(3);
            if (ifig==4) then
               disj(int((flu(1)+0.3)*1D1+1),int((flu(2)+0.3)*1D1)+1)=1.;
@@ -272,8 +268,8 @@ program principal !!REF
         endif
         if (ifig==4) then
            do ik=1,100
-              if (i0==5) write(26,*) real(ik)/1D2,disurf(ik) !nr=ns+4
-              if (i0==6) write(27,*) real(ik)/1D2,disurf(ik) !nr=ns+4
+              if (i0==5) write(26,*) real(ik)/1D2,disurf(ik)/sum(disurf) !nr=ns+4
+              if (i0==6) write(27,*) real(ik)/1D2,disurf(ik)/sum(disurf) !nr=ns+4
 
            enddo
         endif
