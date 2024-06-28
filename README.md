@@ -22,10 +22,10 @@ The fortran compiler used :
 GNU Fortran (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
 Copyright (C) 2021 Free Software Foundation, Inc.
 
-Some Fortran programs require the LAPACK, MINPACK and SEULEX libraries. These libraries can be installed on a Linux system and linked to gfortran using the following commands
-> apt-get install minpack-dev
+Some Fortran programs require the LAPACK, MINPACK, and SEULEX libraries. These libraries can be installed on a Linux system and linked to gfortran using the following commands:
+> apt-get install liblapack-dev
 
-> apt-get install lapack-dev
+> apt-get install minpack-dev
 
 > cp libseulex2.a /usr/lib/
 
@@ -33,8 +33,9 @@ Some Fortran programs require the LAPACK, MINPACK and SEULEX libraries. These li
  
 The files are organized into folders associated to a set of figures:
 - Folder FIG_2-S1 (random reaction network with two chemostats) contains:
-  - sampling_fig2_nmX.f90
-  - fig2B.dat, fig2C.dat, fig2D.dat
+  - Code files: sampling_fig2_nm1.f90 and sampling_fig2_nm1.f90
+  - Data files (Fig2B): dis_n8_nm1.dat dis_n16_nm1.dat dis_n8_nm2.dat, dis_n8_k001.dat dis_n8_k01.dat dis_n8_k1.dat dis_n8_k10.dat
+  - Data files (Fig2C): fig2C-reac_nm1.dat, fig2C-reac_nm2.dat, fig2C-mu_nm1.dat, fig2C-mu_nm2.dat
 - Folder FIG_3-4-S2 (random reaction network with three chemostats) contains:
   - manifold_fig34.f90 (generates manifold_fig3.dat and manifold_fig4.dat)
   - manifold_fig3.dat (used in fig3BCG)
