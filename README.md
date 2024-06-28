@@ -33,6 +33,7 @@ Some Fortran programs require the LAPACK, MINPACK, and SEULEX libraries. These l
 The files are organized into folders associated to a set of figures:
 - FIG_2-S1 (random reaction network with two chemostats)
 - FIG_3-4-S2 (random reaction network with three chemostats)
-- FIG_5-6-S3 (coarse grained metabolic network) contains:
+- FIG_5-6-S3 (coarse grained metabolic network)
+  
 Each folder contains fortran files and gnuplot to generate data and figures, as well as a subfolder named DATA containing most data files.
 
