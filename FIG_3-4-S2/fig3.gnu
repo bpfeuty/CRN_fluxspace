@@ -82,7 +82,7 @@ set label "-J_3=J^*" at 0.3,-0.41 font "Helvetica,15"
 set label "G" at -0.5,0.84 font "Helvetica,23"
 set label "F" at -2.3,0.84 font "Helvetica,23"
 
-plot [-0.1:1.1][-0.5:0.7][-1.8:0.2] 'fig3g_nm2_100K.dat' u 1:4:5 w p pt 7 ps 0.1 lc rgb 'gray','manifold_fig3.dat' u 5:3 w p pt 5 ps 0.2 lc 0 lt 1 notitle,'fig3g.dat' u 1:4 w p ps 0.2 lc rgb "red",'fig3_circ.dat' w p pt 7 ps 1 lc rgb 'violet' notitle
+plot [-0.1:1.1][-0.5:0.7][-1.8:0.2] 'fig3g_nb2_100K.dat' u 1:4:5 w p pt 7 ps 0.1 lc rgb 'gray','manifold_fig3.dat' u 5:3 w p pt 5 ps 0.2 lc 0 lt 1 notitle,'fig3g.dat' u 1:4 w p ps 0.2 lc rgb "red",'fig3_circ.dat' w p pt 7 ps 1 lc rgb 'violet' notitle
 unset key
 
 
