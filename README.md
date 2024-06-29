@@ -7,14 +7,15 @@ This repository contains the program, executable and data files necessary to rep
 - ".py" for python files
 - ".dat" for data files
 - ".a" for fortran library file
-- ".gnu" for gnuplot file used to generate figure ?
+- ".gnu" for gnuplot file
+- ".pdf" for portable document format
   
 **File naming convention:**
 - "manifold" for computing the feasible flux space of positive entropy production rate.
   - manifold_fig34.f90 and manifold_fig56.f90
 - "sampling" for computing the sampled flux solutions
   - sampling_fig2_nmX.f90, sampling_fig34_nmX.f90 and sampling_fig56.f90
-- "figXy" for data file associated to Fig X, panel Y.
+- "figX" for figure, gnuplot and data files associated to Figure X.
   
 **Fortran compiler used :**
 GNU Fortran (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
@@ -35,4 +36,4 @@ Some Fortran programs require the LAPACK, MINPACK, and SEULEX libraries. These l
 - **FIG_3-4-S2/** : random reaction network involving three chemostats
 - **FIG_5-6-S3/** : coarse grained metabolic network
   
-Each folder contains Fortran and Gnuplot files to generate data and figures, as well as a subfolder named **DATA/** containing most data files.
+Each folder contains Fortran and Gnuplot files to generate data and figures (fig*.pdf), as well as a subfolder named **DATA/** containing most data files.
