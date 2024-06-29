@@ -1,9 +1,12 @@
 This folder contains files associated to Figures 5 and 6 and supplementary Figure S3 of our study.
 
 **FEASIBLE SOLUTION SPACES IN FIGURES 5,6 AND S3**
-- use "manifold_fig56.f90" to generate :
+- "manifold_fig56.f90" generates
   - boundary_fig5.dat (boundary manifold in high dimension space)
   - jbexglu_fig5.dat, jbexace_fig5.dat, jbexox_fig5.dat, jbexglu_fig5.dat (projection in 2D flux spaces)
+- "nullspaces.py" computes:
+  - left/right null space vectors
+  - number of closed/emergent reaction cycles and number of broken/unbroken conservation laws
 
 **SAMPLED SOLUTION SPACES IN FIGURES 5,6 AND S3**
 - sampling_fig56.f90 generates (depending in the selected value i0)
