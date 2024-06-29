@@ -23,9 +23,7 @@ Copyright (C) 2021 Free Software Foundation, Inc.
 
 **Required libraries:**
 Some Fortran programs require the LAPACK, MINPACK, and SEULEX libraries. These libraries can be installed on a Linux system and linked to gfortran using the following commands:
-> apt-get install liblapack-dev
-
-> apt-get install minpack-dev
+> apt-get install libblas-dev liblapack-dev minpack-dev
 
 > cp libseulex2.a /usr/lib/
 
