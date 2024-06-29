@@ -21,20 +21,8 @@ This folder contains files associated to Figures 3 and 4 and supplementary Figur
   - figS2.dat (need to adjust the hyperparameters and sampled parameter ranges)
 - minimal_fig34.f90 generates (depending in the selected value ifig)
   - fig3g.dat (nr=5 must be selected)
+  - values mu and J written in Fig3F.
   - fig4g.dat (nr=7 must be selected)
 
-    
--- dis_n8_nm1.dat, dis_n8_kX.dat, dis_n16_kX.dat
-- use "sampling_fig2_nm2.f90" to generate:
--- dis_n8_nm1.dat, dis_n8_kX.dat
-  
-**FIG2C:**
-- use "sampling_fig2_nm1.f90" to generate:
--- dis_n8_nm1.dat, dis_n8_kX.dat, dis_n16_kX.dat
-- use "sampling_fig2_nm2.f90" to generate:
--- dis_n8_nm1.dat, dis_n8_kX.dat
-  
-**FIGS1:**
-- use "sampling_fig2_nm1.f90" to generate:
 -- all distributions.
 -- hyperparameters and ranges are iteratively changed
