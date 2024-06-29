@@ -7,8 +7,10 @@ This folder contains files associated to Figure 2 and supplementary Figure S1 of
   - dis_n8_nm2.dat
   
 **FIG2C:**
-- use "sampling_fig2_nm1.f90" to generate:
-  - fig2C
+- use "sampling_fig2_nmX.f90" (X=1,2 for left/right panels) to generate:
+  - fig2C-mean_nmX.dat 
+  - fig2C-mean.dat
+
 - use "sampling_fig2_nm2.f90" to generate:
   - dis_n8_nm1.dat, dis_n8_kX.dat
   
