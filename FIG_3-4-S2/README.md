@@ -23,6 +23,3 @@ This folder contains files associated to Figures 3 and 4 and supplementary Figur
   - fig3g.dat (nr=5 must be selected)
   - values mu and J written in Fig3F.
   - fig4g.dat (nr=7 must be selected)
-
--- all distributions.
--- hyperparameters and ranges are iteratively changed
