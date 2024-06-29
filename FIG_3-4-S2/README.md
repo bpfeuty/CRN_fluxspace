@@ -1,7 +1,7 @@
 This folder contains files associated to Figures 3 and 4 and supplementary Figure S2 of our study.
 
 **FEASIBLE SOLUTION SPACES IN FIGURES 3,4 AND S2**
-- use "manifold_fig34.f90" to generate "manifold_fig3.dat" and "manifold_fig4.dat"
+- "manifold_fig34.f90" generates "manifold_fig3.dat" and "manifold_fig4.dat"
 - columns of data files reads: J1ex,J2ex,j3ex,Ts,Ts/Ts*
 
 **SAMPLED SOLUTION SPACES IN FIGURES 3,4 AND S2**
