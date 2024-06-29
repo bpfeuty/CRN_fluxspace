@@ -3,7 +3,7 @@
 module GLOB ! DEFINITION OF THE VARIABLE AND NETWORK
   implicit none
   
-  integer,parameter::ns=5,nr=7,nm=2,nc=3  ! hyperparameters
+  integer,parameter::ns=5,nr=5; nm=2,nc=3  ! hyperparameters
   real(kind=kind(0.d0)),parameter::RT=2.5
 
   !! ns is the number of species (=8 in default simulations but varied in FIGS2)
@@ -91,7 +91,7 @@ end  module GLOB
 
 program principal !!REF
   use glob; implicit none;
-  
+
   !dn is the number of emergent cycles
   integer::ik,i0,ipop,it,i1,i2,i3,ifig   !loop integer
   integer::ib,idid                       ! warning integer
@@ -104,7 +104,7 @@ program principal !!REF
   real(kind=kind(0.d0)),dimension(nr)::ent,dg,dg0  ! sortie de call flux et SVD
   real(kind=kind(0.d0))::ti,tf,ente(3),ff(nr),sigtot,flu(nr)
   real(kind=kind(0.d0))::emux,sigmax ! for computing  maximum entropy sig_max
-  
+
   !specific outputs for determining optimal topologies
   real(kind=kind(0.d0))::maxj,disj1(50),disj2(50)    !store maximal values of specific fluxes and their distribution (FIG3)
   real(kind=kind(0.d0))::vmax,disj(12,12),disurf(100) !feasible space volume and its distribution (FIG4)
@@ -116,95 +116,98 @@ program principal !!REF
   !nk is the number of kinetic sampling for one given topology
   !nk=500 is used to test the sampled space of given topologies
   !nk=1 is used to sample together topologies and kinetics
-  nsamp=1000; nk=1000; 
- 
-  do ifig=4,4
-     !Chemostatting 
-     muy0=0D0;
-     if (ifig==3) then
-        muy0=(/2.,-2.,3./)*RT; yy=(/1.,1.,0.5/); kcat(1:nc)=1d0; 
-     endif
-     if (ifig==4) then 
-        muy0=(/1.,1.,-1./)*RT;  yy=(/1.,1.,1./); kcat(1:nc)=1d0; 
-     endif
-     muy=muy0+RT*log(yy);
+  nsamp=1000; nk=2000; 
 
-     !Equations 10 and 11 to comptute mu^* and Ts^max
-     chiyy(1:nc)=kcat(1:nc)*yy(1:nc); chimu(1:nc)=kcat(1:nc)*exp(-muy0(1:nc)/RT); 
-     emux=sum(chiyy)/sum(chimu);
-     sigmax=sum(kcat(1:nc)*muy(1:nc)*exp(-muy0(1:nc)/RT)*(exp(muy(1:nc)/RT)-emux)); 
-     write(*,*) 'sig_max=',sigmax
+  
+  ifig=3;  !for figure 3 nr=5 is selected (as the minimal number of reaction achieving maximum J3ex)
+  !ifig=4; !for figure 4 nr=7 is selected (as the minimal number of reaction achieving maximum Vmax)
+  !though not necessary range of chemical has been set to mu=0 for reproducibility of optimal state.
+  
+  !Chemostatting 
+  muy0=0D0;
+  if (ifig==3) then
+     muy0=(/2.,-2.,3./)*RT; yy=(/1.,1.,0.5/); kcat(1:nc)=1d0; 
+  endif
+  if (ifig==4) then 
+     muy0=(/1.,1.,-1./)*RT;  yy=(/1.,1.,1./); kcat(1:nc)=1d0; 
+  endif
+  muy=muy0+RT*log(yy);
 
-     disj1=0D0;disj2=0D0; disurf=0.;
-     do ipop=1,nsamp
-        stoch=0.;
-        !generate a stoichiometric matrix of multimolecularity
-        !! (output are the mapping function nnn and the dimensionality of kernel and cokernel)
-9       call stochio(nm,nnn,nd); 
+  !Equations 10 and 11 to comptute mu^* and Ts^max
+  chiyy(1:nc)=kcat(1:nc)*yy(1:nc); chimu(1:nc)=kcat(1:nc)*exp(-muy0(1:nc)/RT); 
+  emux=sum(chiyy)/sum(chimu);
+  sigmax=sum(kcat(1:nc)*muy(1:nc)*exp(-muy0(1:nc)/RT)*(exp(muy(1:nc)/RT)-emux)); 
+  write(*,*) 'sig_max=',sigmax
 
-        !! Selection of topologies with specific dimensionalities of the kernel
-        !! (nbc, nec and ncc keeping in mind that nbc+nec=nc)
-        ncc=nd(3); nec=nd(1)-ncc;  !ncc and nec are the number of closed and emergent reaction cycles
-        !if (conn(1,2)>0.5) goto 9 !exclude connections between exchange species
-        if (nec==0) goto 9
+  disj1=0D0;disj2=0D0; disurf=0.;
+  do ipop=1,nsamp
+     stoch=0.;
+     !generate a stoichiometric matrix of multimolecularity
+     !! (output are the mapping function nnn and the dimensionality of kernel and cokernel)
+9    call stochio(nm,nnn,nd); 
 
-        !! sampling of thermodynamic parameters
-        call random_number(mu0);
-        !mu0=12D0*(mu0-0.5); !random chemical potential
-        mu0=0D0*(mu0-0.5); !random chemical potential
-        mu0(1:nc)=muy0(1:nc); 
-        do i1=nc+1,nr ! from mu0 -> dg -> keq 
-           if (nm==1) then 
-              dg0(i1)=mu0(nnn(i1,1))-mu0(nnn(i1,2));
-           else
-              dg0(i1)=mu0(nnn(i1,1))+mu0(nnn(i1,2))-mu0(nnn(i1,3))-mu0(nnn(i1,4))
-           endif
-           keq(i1)=exp(-dg0(i1)/RT); 
-        enddo
-        write(*,*) ipop
-        !kinetic sampling
-        maxj=-1.;  disj=0D0
-        do ik=1,nk 
-           call random_number(kcat); kcat=10**(4.*kcat-2); 
-           kcat(1:nc)=1d0;
-           ! simulations
-           ti=0D0; tf=1D4; xx=1.*exp(-mu0/RT);
-           call evolSEU(ti,tf,xx,idid,1.d-6);
-           call syssol(xx); !cross-check
-           call sys_rand(xx,ff,0D0); mu=mu0+RT*log(xx); 
-           ib=0;
-           call flux(xx,flu,dg,ent,ente,ib);
-           sigtot=ente(1);
-           if (ib==2) goto 9
-           write(10+ifig,*) sigtot/sigmax,flu(1:nc),ente(3)/ente(1),mu(4)-mu(5),mu(5)-mu(4)
-           if (-flu(3)>maxj) maxj=-flu(3);
-           disj(int((flu(1)+0.3)*1D1+1),int((flu(2)+0.3)*1D1)+1)=1.;
-        enddo
-        vmax=sum(disj); vmax=vmax/1D2/0.96;
-        ! exit when the optimal state is sampled
-        if (ifig==3) then
-           if (maxj>0.37) goto 90
+     !! Selection of topologies with specific dimensionalities of the kernel
+     !! (nbc, nec and ncc keeping in mind that nbc+nec=nc)
+     ncc=nd(3); nec=nd(1)-ncc;  !ncc and nec are the number of closed and emergent reaction cycles
+     !if (conn(1,2)>0.5) goto 9 !exclude connections between exchange species
+     if (nec==0) goto 9
+
+     !! sampling of thermodynamic parameters
+     call random_number(mu0);
+     !mu0=12D0*(mu0-0.5); !random chemical potential
+     mu0=0D0*(mu0-0.5); !random chemical potential
+     mu0(1:nc)=muy0(1:nc); 
+     do i1=nc+1,nr ! from mu0 -> dg -> keq 
+        if (nm==1) then 
+           dg0(i1)=mu0(nnn(i1,1))-mu0(nnn(i1,2));
+        else
+           dg0(i1)=mu0(nnn(i1,1))+mu0(nnn(i1,2))-mu0(nnn(i1,3))-mu0(nnn(i1,4))
         endif
-        if (ifig==4) then
-           if (vmax>0.8) goto 90
-        endif
-        !distribution of flux space volume figure fig4E         
-        write(*,*) ipop,vmax,maxj,nc-nec
-        rewind(10+ifig)
-     enddo !ipop loop
-90   continue
-
+        keq(i1)=exp(-dg0(i1)/RT); 
+     enddo
+     write(*,*) ipop
+     !kinetic sampling
+     maxj=-1.;  disj=0D0
+     do ik=1,nk 
+        call random_number(kcat); kcat=10**(4.*kcat-2); 
+        kcat(1:nc)=1d0;
+        ! simulations
+        ti=0D0; tf=1D4; xx=1.*exp(-mu0/RT);
+        call evolSEU(ti,tf,xx,idid,1.d-6);
+        call syssol(xx); !cross-check
+        call sys_rand(xx,ff,0D0); mu=mu0+RT*log(xx); 
+        ib=0;
+        call flux(xx,flu,dg,ent,ente,ib);
+        sigtot=ente(1);
+        if (ib==2) goto 9
+        write(10+ifig,*) sigtot/sigmax,flu(1:nc),ente(3)/ente(1),mu(4)-mu(5),mu(5)-mu(4)
+        if (-flu(3)>maxj) maxj=-flu(3);
+        disj(int((flu(1)+0.3)*1D1+1),int((flu(2)+0.3)*1D1)+1)=1.;
+     enddo
+     vmax=sum(disj); vmax=vmax/1D2/0.96;
+     ! exit when the optimal state is sampled
      if (ifig==3) then
-        write(*,*) '-J3max=',maxj
-        write(*,*) 'nbc=',nc-nec
-        !write(*,*) 'mu=',mu
-        !write(*,*) 'J=',flu
+        if (maxj>0.37) goto 90
      endif
      if (ifig==4) then
-        write(*,*) 'Vmax=',vmax
+        if (vmax>0.8) goto 90
      endif
-  enddo !i0
-  
+     !distribution of flux space volume figure fig4E         
+     write(*,*) ipop,vmax,maxj,nc-nec
+     rewind(10+ifig)
+  enddo !ipop loop
+90 continue
+
+  if (ifig==3) then
+     write(*,*) '-J3max=',maxj
+     write(*,*) 'nbc=',nc-nec
+     !write(*,*) 'mu=',mu
+     !write(*,*) 'J=',flu
+  endif
+  if (ifig==4) then
+     write(*,*) 'Vmax=',vmax
+  endif
+
 contains
 
   subroutine stochio(nm,nnn,nd)
@@ -289,7 +292,7 @@ contains
     real(kind=kind(0.d0)),intent(out)::flu(nr),ent(nr),ente(3),dg(nr)
     real(kind=kind(0.d0))::tmp,knorm,ktm(nr)
     integer::j,ki
-    
+
     ! we use the following formula for computing DG (gibbs free energy) and sigma (entropy production rate)
     ! sigma_r = -J_r DG_r = J_r log(J_r^+/J_r^-)
     ! DG_r = -RT*log(J_r^+/J_^-)
@@ -323,7 +326,7 @@ contains
        write(*,'(A,15f8.3)') ' S= ',ent
     endif
   end subroutine flux
-  
+
 end program principal
 
 !!!!!!EXTERNAL SUBROUTINES FOR SEULEX !!!!!
