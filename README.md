@@ -1,4 +1,4 @@
-# metafluxspace_BJ2024
+# CRN_fluxspace
 
 This repository contains the program, executable and data files necessary to reproduce the results of the scientific publication entitled "Free-energy transduction mechanisms shape the flux space of metabolic networks" by Benjamin Pfeuty, submitted to Biophysical Journal.
 
