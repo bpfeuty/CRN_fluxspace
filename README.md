@@ -6,9 +6,9 @@ This repository contains the program, executable and data files necessary to rep
 - ".f90" for fortran files
 - ".py" for python files
 - ".dat" for data files
-- ".a" for fortran library file
-- ".gnu" for gnuplot file
-- ".pdf" for portable document format
+- ".a" for fortran library files
+- ".gnu" for gnuplot files
+- ".pdf" for figure files
   
 **File naming convention:**
 - "manifold" for computing the feasible flux space of positive entropy production rate.
