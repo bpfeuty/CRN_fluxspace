@@ -1,23 +1,19 @@
-! coarse grained model of carbohydrate metabolism
-! fortran code that generates the figure 5c, 6ab and S3
-! compile with gfortran -llapack -lminpack -lseulex2  
-! compilation time is about minutes
+! Coarse grained model of carbohydrate metabolism
+! Fortran code that generates the figure 5c, 6ab and S3
+! Compile with gfortran -llapack -lminpack -lseulex2  
+! Compilation time is less than minute
 
 ! important parameters
-! nv=10 metabolite species (nc=7 exchanged and 3 internal)
+! nc=7 chemostat species 
+! nv=10 metabolite species 
 ! nr=12 metabolic reactions
 ! PT is the total concentration of ATP+ADP=10 mM
-! num is the ,numericla scheme to compute solutions
-! num=0 combine seulex and minpack for sol
-! num=1 seulex
-! num=2 minpack
-! seulex method ensure that steady state solution are stable
+! numerical method combines seulex and hybrid-powell for steady solutions
 ! mu0 and DG0 values are used to compute keq in mass-action kinetics
 
 ! SAMPLING
 ! perform sampling with n_samp=20000 
-! kinetic parameters are sampled over 8 order of magnitude, with some rescaling to more efficiently fill the feasible flux solution space
-
+! kinetic parameters are sampled over 8 order of magnitude + rescaling to fill the solution space
 
 module GLOB 
   implicit none
@@ -172,12 +168,12 @@ program principal !!REF
   real(kind=kind(0.d0)),dimension(nr)::flu,flus,ff,rrand,dgs
   integer,dimension(nr,5)::ec
   real(kind=kind(0.d0)),dimension(3)::entex 
-  
+
   open(11,file='fig56_samp.dat');
   open(12,file='fig6b3.dat');
   open(13,file='fig6b1.dat');
   nsamp=20000;
-  do i3=1,3,1
+  do i3=1,1,1
      !variations of stoichiometric coefficients
      if (i3==1)  nb=(/10,10,10/); !ref 
      if (i3==2)  nb=(/1,1,10/);   !1
@@ -214,7 +210,6 @@ program principal !!REF
         ec(:,3)=(/1,0,0,-6,-6,6,0,1,0,2,0,30/);    ! resp-mode
         !ec need to change as function of nb
         !write(*,*) 'checks ec and bl'
-        write(*,*) stochx(7,:)
         write(*,'(15f7.2)') matmul(stochx,ec(1:nr,1))
         write(*,'(15f7.2)') matmul(stochx,ec(1:nr,2))
         write(*,'(15f7.2)') matmul(stochx,ec(1:nr,3))
@@ -245,7 +240,7 @@ program principal !!REF
      !write(*,'(1A,18f11.2)') 'dg0=',dg0(nc+1:nr)
      !write(*,'(1A,18e11.2)') 'keq=',keq(nc+1:nr) 
      thr=150.; 
-     do i1=nc+1,nr !voir si j'enleve 
+     do i1=nc+1,nr
         if (keq(i1)<10**(-thr)) keq(i1)=10**(-thr)
         if (keq(i1)>10**(thr)) keq(i1)=10**thr
      enddo
@@ -269,27 +264,25 @@ program principal !!REF
         kcat(8)=kcat(8)*1D3;  kcat(11)=kcat(11)*1D3; kcat(12)=kcat(12)**0.5
 
         !call random_number(rrand);kcat(nc+1:nr)=kcats(nc+1:nr)*10**(0.2*(rrand(nc+1:nr)-0.5)); !optimization
-        if (num==0) then
-           ti=0D0; tf=1D10; xx=xxs; 
-           call evolSEU(ti,tf,xx,idid,1d-10);
-           mun(1:9)=mu0(1:9)+RT*log(xx); mun(10)=mu0(10)+RT*log(PT-xx(9));
-           if (isnan(xx(1))) goto 1
-           call sys_rand(xx,ff,0D0);  
-           call syssol(xx); call sys_rand(xx,ff,0D0);
+        ti=0D0; tf=1D10; xx=xxs; 
+        call evolSEU(ti,tf,xx,idid,1d-10);
+        mun(1:9)=mu0(1:9)+RT*log(xx); mun(10)=mu0(10)+RT*log(PT-xx(9));
+        if (isnan(xx(1))) goto 1
+        call sys_rand(xx,ff,0D0);  
+        call syssol(xx); call sys_rand(xx,ff,0D0);
 
-           if (sum(ff**2)>10**(-5.)) then
-              write(*,*) 'NO STEADY STATE!!!'
-              ff=0D0; xx=0D0; goto 1
-           endif
-           if (idid.ne.1) goto 1 !check
+        if (sum(ff**2)>10**(-5.)) then
+           write(*,*) 'no ss at',isamp
+           ff=0D0; xx=0D0; goto 1
         endif
+        if (idid.ne.1) goto 1 !check
         call flux(xx,flu,dg,ent);
         if (isnan(ent(1))) goto 1 !check
         entex(1)=sum(ent);  entex(2)=sum(ent(1:nc)); entex(3)=sum(ent(nc+1:nr));
-        
-         h_ares=nb(2)*(-mun(9)+mun(10)+mun(5))/(mun(8)+3D0*mun(6)-3D0*mun(5)-2D0*mun(4))
-         h_gly=nb(1)*(-mun(9)+mun(10)+mun(5))/(mun(1)-2D0*mun(8)-2D0*mun(4))
-        write(10+i3,*) entex(1),flu,h_gly,h_ares,entex(1)/6D1
+
+        h_ares=nb(2)*(-mun(9)+mun(10)+mun(5))/(mun(8)+3D0*mun(6)-3D0*mun(5)-2D0*mun(4))
+        h_gly=nb(1)*(-mun(9)+mun(10)+mun(5))/(mun(1)-2D0*mun(8)-2D0*mun(4))
+        write(10+i3,*) entex(1),flu,h_gly,h_ares,entex(1)/6D1,entex(2),entex(3)
      enddo
   enddo
 

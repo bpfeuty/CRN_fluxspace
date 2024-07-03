@@ -1,18 +1,16 @@
-! coarse grained model of carbohydrate metabolism
-! fortran code that generates the figure 6cd
-! compile with gfortran -llapack -lminpack -lseulex2  
-! compilation time is about minutes
+! Coarse grained model of carbohydrate metabolism
+! Fortran code that generates the figure 5c, 6ab and S3
+! Compile with gfortran -llapack -lminpack -lseulex2  
+! Compilation time is less than minute
 
 ! important parameters
-! nv=10 metabolite species (nc=7 exchanged and 3 internal)
+! nc=7 chemostat species 
+! nv=10 metabolite species 
 ! nr=12 metabolic reactions
 ! PT is the total concentration of ATP+ADP=10 mM
-! num is the ,numericla scheme to compute solutions
-! num=0 combine seulex and minpack for sol
-! num=1 seulex
-! num=2 minpack
-! seulex method ensure that steady state solution are stable
+! numerical method combines seulex and hybrid-powell for steady solutions
 ! mu0 and DG0 values are used to compute keq in mass-action kinetics
+! perform sampling with n_samp=20000
 
 ! OPTIMIZATION
 ! perform optimization through random optimization with nsamp=500
@@ -254,25 +252,23 @@ program principal !!REF
         !case of acetate nutrient source
         muy=muy0+RT*log(yy); 
 
-!!! SAMPLING PROCESS
+!!! OPTIMIZATION PROCESS
         kcats(nc+1:nr)=(/1D6,1D0,1D0,1D6,1D0/); scts=-1D0; 
         do isamp=1,nsamp
 1          xxs=0.01D0;
            call random_number(rrand);
            kcat(nc+1:nr)=kcats(nc+1:nr)*10**(0.2*(rrand(nc+1:nr)-0.5)); !optimization
-           if (num==0) then
-              ti=0D0; tf=1D10; xx=xxs; 
-              call evolSEU(ti,tf,xx,idid,1d-10);
-              mun(1:9)=mu0(1:9)+RT*log(xx); mun(10)=mu0(10)+RT*log(PT-xx(9));
-              call sys_rand(xx,ff,0D0);  
-              call syssol(xx); call sys_rand(xx,ff,0D0);
+           ti=0D0; tf=1D10; xx=xxs; 
+           call evolSEU(ti,tf,xx,idid,1d-10);
+           call sys_rand(xx,ff,0D0);  
+           call syssol(xx); call sys_rand(xx,ff,0D0);
+           mun(1:9)=mu0(1:9)+RT*log(xx); mun(10)=mu0(10)+RT*log(PT-xx(9));
 
-              if (sum(ff**2)>10**(-5.)) then
-                 write(*,*) 'NO STEADY STATE!!!'
-                 ff=0D0; xx=0D0; goto 1
-              endif
-              if (idid.ne.1) goto 1 !check
+           if (sum(ff**2)>10**(-5.)) then
+              write(*,*) 'no ss at', isamp
+              ff=0D0; xx=0D0; goto 1
            endif
+           if (idid.ne.1) goto 1 !check
            call flux(xx,flu,dg,ent);
            if (isnan(ent(1))) goto 1 !check
            entex(1)=sum(ent);  entex(2)=sum(ent(1:nc)); entex(3)=sum(ent(nc+1:nr));
