@@ -4,7 +4,6 @@ This repository contains the code and data files necessary to reproduce the resu
 
 **File extensions:**
 - ".f90" for fortran files
-- ".py" for python files
 - ".dat" for data files
 - ".a" for fortran library files
 - ".pdf" for figure files
