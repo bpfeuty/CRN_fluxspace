@@ -7,7 +7,6 @@ This repository contains the program, executable and data files necessary to rep
 - ".py" for python files
 - ".dat" for data files
 - ".a" for fortran library files
-- ".gnu" for gnuplot files
 - ".pdf" for figure files
   
 **File naming convention:**
